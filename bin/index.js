@@ -19,7 +19,7 @@ const templateDir = path.join(rootDir, 'template');
 
 fs.ensureDirSync(projectName);
 const appRoot = path.resolve(projectName);
-console.log(appRoot)
+
 try {
   fs.copySync(templateDir, appRoot);
   console.log("COPY OK");
