@@ -1,17 +1,28 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
-
+const commander = require('commander');
+const chalk = require('chalk');
+let projectName;
 const rootDir = path.join(__dirname, '..');
-const packagesDir = path.join(rootDir, 'packages');
+const templateDir = path.join(rootDir, 'template');
 
-console.log(`rootDir = ${rootDir}`)
-console.log(`packagesDir = ${packagesDir}`)
-/* fse.copySync(srcDir, path.resolve('../'), function (err) {
-  if (err) {                 ^
-    console.error(err);      |___{ overwrite: true } // add if you want to replace existing folder or file with same name
-  } else {
-    console.log("success!");
-  }
-}); */
+  const program = new commander.Command()
+  .arguments('<project-directory>')
+  .usage(`${chalk.green('<project-directory>')} [options]`)
+
+  .action(name => {
+    projectName = name;
+  })
+  .parse(process.argv);
+
+fs.ensureDirSync(projectName);
+const appRoot = path.resolve(projectName);
+console.log(appRoot)
+try {
+  fs.copySync(templateDir, appRoot);
+  console.log("COPY OK");
+} catch (err) {
+  console.log(err);
+}
